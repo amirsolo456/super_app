@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:container_app/pages/login/login_bloc.dart';
 import 'package:container_app/pages/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,29 +14,29 @@ import 'package:ui_components_package/common_componenets/Buttons/language_button
 import 'package:ui_components_package/common_componenets/Buttons/language_button_standalone/language_button_stand_alone_cubit.dart';
 
 final int networkType = 0;
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //HttpOverrides.global = MyHttpOverrides();
-  // await Firebase.initializeApp(
-  //   options: FirebaseOptions(
-  //     apiKey: "AIzaSyDaFoQ1BufZNuUKKYrVfnoAPjVytggLeJY",
-  //     appId: "1:511210742680:android:a754014ad3e3daefab81ed",
-  //     messagingSenderId: "511210742680",
-  //     projectId: "aryanerp-e996e",
-  //     databaseURL: "https://aryanerp-e996e-default-rtdb.firebaseio.com",
-  //     storageBucket: "aryanerp-e996e.firebasestorage.app",
-  //   ),
-  // );
+  HttpOverrides.global = MyHttpOverrides();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyDaFoQ1BufZNuUKKYrVfnoAPjVytggLeJY",
+      appId: "1:511210742680:android:a754014ad3e3daefab81ed",
+      messagingSenderId: "511210742680",
+      projectId: "aryanerp-e996e",
+      databaseURL: "https://aryanerp-e996e-default-rtdb.firebaseio.com",
+      storageBucket: "aryanerp-e996e.firebasestorage.app",
+    ),
+  );
   setupServices();
-  // String? token = await FirebaseMessaging.instance.getToken();
-  // if (token!.isNotEmpty) {
-  //   try {
-  //     final storageService = getIt.get<StorageService>();
-  //     await storageService.setDeviceToken(token);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  String? token = await FirebaseMessaging.instance.getToken();
+  if (token!.isNotEmpty) {
+    try {
+      final storageService = getIt.get<StorageService>();
+      await storageService.setDeviceToken(token);
+    } catch (e) {
+      print(e);
+    }
+  }
   runApp(const MyApp());
 }
 
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
             storage: storageService,
           ),
         ),
-        BlocProvider<LoginBloc>(create: (_) => LoginBloc(networkMode: 1)),
+        BlocProvider<LoginBloc>(create: (_) => LoginBloc(networkMode: 0)),
       ],
       child: BlocBuilder<LanguageButtonStandAloneCubit, Locale>(
         builder: (context, locale) {

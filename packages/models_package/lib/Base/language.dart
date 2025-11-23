@@ -12,8 +12,8 @@ class Language {
   final String? smallName;
   final String? bigName;
   final String? completeName;
-  final int? countryCode;
-  final int? languageCode;
+  final String? countryCode;
+  final String? languageCode;
 
   factory Language.fromJson(Map<String, dynamic> json) {
     return Language(
@@ -21,8 +21,8 @@ class Language {
       smallName: json['smallName'] as String?,
       bigName: json['bigName'] as String?,
       completeName: json['completeName'] as String?,
-      countryCode: json['countryCode'] as int ?? 0,
-      languageCode: json['languageCode'] as int ?? 0,
+      countryCode: json['countryCode'] ?? '0',
+      languageCode: json['languageCode'] ?? '0',
     );
   }
 
@@ -41,8 +41,8 @@ class Language {
     String? smallName,
     String? bigName,
     String? completeName,
-    int? countryCode,
-    int? languageCode,
+    String? countryCode,
+    String? languageCode,
   }) {
     return Language(
       id: id ?? this.id,
@@ -57,14 +57,14 @@ class Language {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Language &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              smallName == other.smallName &&
-              bigName == other.bigName &&
-              completeName == other.completeName &&
-              countryCode == other.countryCode &&
-              languageCode == other.languageCode;
+      other is Language &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          smallName == other.smallName &&
+          bigName == other.bigName &&
+          completeName == other.completeName &&
+          countryCode == other.countryCode &&
+          languageCode == other.languageCode;
 
   @override
   int get hashCode =>
