@@ -1,6 +1,8 @@
 import 'package:erp_app/main.dart' as erp_app;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:models_package/Base/language.dart';
+import 'package:ui_components_package/common_componenets/Buttons/language_button_standalone/language_button_stand_alone_cubit.dart';
 import 'login/login_page.dart';
 
 
@@ -20,22 +22,30 @@ class ShellApp extends StatelessWidget {
 class LauncherPage extends StatelessWidget {
   LauncherPage({super.key});
 
-  final List<_AppOption> options = [
-    _AppOption('Login Page', Icons.login, () {
-      return LoginPage();
-    }),
-    _AppOption('ERP App', Icons.business, () {
-      return erp_app.buildERPApp(
-          Language(id: 0, smallName: 'fa', completeName: 'fa_IR', bigName: 'IR')
-      );
-    }),
-    _AppOption('Other', Icons.widgets, () {
-      return const Scaffold(body: Center(child: Text('Other App')));
-    }),
-  ];
+
+  Language _localeToLanguage(Locale locale) {
+    final lang = locale.languageCode;
+    final country = locale.countryCode ?? '';
+    final smallName = lang;
+    final completeName = country.isNotEmpty ? '${lang}_$country' : lang;
+    final bigName = country;
+    final id = lang == 'fa' ? 0 : 1;
+
+    return Language(id: id, smallName: smallName, completeName: completeName, bigName: bigName);
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LanguageButtonStandAloneCubit>().state;
+    final languageModel = _localeToLanguage(locale);
+    final options = <_AppOption>[
+      _AppOption('Login Page', Icons.login, () => LoginPage()),
+      _AppOption('ERP App', Icons.business, () {
+        return erp_app.buildERPApp(languageModel);
+      }),
+      _AppOption('Other', Icons.widgets, () => const Scaffold(body: Center(child: Text('Other App')))),
+    ];
     return Scaffold(
       appBar: AppBar(title: const Text('Super App Launcher')),
       body: GridView.count(

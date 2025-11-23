@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:models_package/Base/language.dart';
 import 'package:services_package/storage_service.dart';
 
@@ -27,8 +27,8 @@ class LanguageButtonStandAloneCubit extends Cubit<Locale> {
         smallName: locale.languageCode,
         bigName: locale.countryCode ?? '',
         completeName: locale.toString(),
-        countryCode: locale.countryCode as int ?? 0,
-        languageCode:locale.languageCode as int ?? 0,
+        countryCode: locale.countryCode,
+        languageCode: locale.languageCode,
       );
 
       await storage?.setLanguage(lang);

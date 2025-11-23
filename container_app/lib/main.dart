@@ -14,7 +14,8 @@ import 'package:ui_components_package/common_componenets/Buttons/language_button
 import 'package:ui_components_package/common_componenets/Buttons/language_button_standalone/language_button_stand_alone_cubit.dart';
 
 final int networkType = 0;
-Future<void> main() async {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Firebase.initializeApp(
@@ -27,21 +28,27 @@ Future<void> main() async {
       storageBucket: "aryanerp-e996e.firebasestorage.app",
     ),
   );
+  Locale initialLocale = const Locale('fa', 'IR'); // fallback
   setupServices();
   String? token = await FirebaseMessaging.instance.getToken();
   if (token!.isNotEmpty) {
     try {
       final storageService = getIt.get<StorageService>();
       await storageService.setDeviceToken(token);
+      final dyn = await storageService
+          .getLanguage(); // dynamic: could be String or Locale or null
+      initialLocale = Locale(dyn!.languageCode ?? 'fa'); // dyn;
     } catch (e) {
       print(e);
     }
   }
-  runApp(const MyApp());
+  runApp(MyApp(initialLocale: initialLocale));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Locale initialLocale;
+
+  const MyApp({super.key, required this.initialLocale});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +57,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<LanguageButtonStandAloneCubit>(
           create: (_) => LanguageButtonStandAloneCubit(
-            initialLocale: Locale('fa', 'IR'),
+            initialLocale: initialLocale,
             storage: storageService,
           ),
         ),
@@ -60,9 +67,7 @@ class MyApp extends StatelessWidget {
         builder: (context, locale) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            locale: Locale(
-              ((storageService.getLanguage()) ?? Locale).toString(),
-            ),
+            locale: initialLocale,
             supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
             localizationsDelegates: const [
               AppLocalizations.delegate,
