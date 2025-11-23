@@ -1,0 +1,46 @@
+{
+  "appTitle": "آریان فرانت",
+  "profileTitle": "حساب کاربری",
+  "loginPageTitle": "صفحه ورود",
+  "phoneNumber": "شماره تلفن",
+  "password": "رمز عبور",
+  "passwordForgot": "فراموشی رمز عبور",
+  "passwordRecovery": "تکرار رمز عبور",
+  "passwordValidationNullMsg": "رمز عبور وارد شده درست نمی باشد.",
+  "passwordValidationMsg": "رمز عبور خود را وارد کنید.",
+  "personList": "اشخاص شرکت ها",
+  "userInfo": "مشخصات کاربری",
+  "userPasswordChange": "تغییر رمز عبور",
+  "usernameValidationNullMsg": "نام کاربر یافت نشد!",
+  "userWallet": "کیف پول",
+  "userSettings": "تنظیمات حساب",
+  "userOtherAccounts": "حساب های دیگر",
+  "usersTitle": "عنوان حساب",
+  "usersDevices": "دستگاه های من",
+  "usersSignOut": "خروج از حساب کاربری",
+  "loginButtonText": "ورود",
+  "loginButtonLoadingText": "لطفا صبر کنید",
+  "loginButtonSignUpText": "ایجاد حساب",
+  "loginButtonOtpText": "تایید و ادامه",
+  "loginFailed": "ورود ناموفق",
+  "languagesDisplayName": "",
+  "@languagesDisplayName": {
+    "description": "فارسی",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "فارسی"
+      }
+    }
+  },
+  "@languagesDisplayName": {
+    "description": "English",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+  "userSignupLabel": "شما در هیچ حسابی عضویت ندارید.\nاگر صاحب یا نماینده یک کسب و کار هستید، میتوانید یک حساب برای [b]کاربر اصلی[/b] یا [b]ادمین شرکت[/b] خودتان بسازید !\nاگر از پرسنل یک کسب و کار هستید، منتظر دریافت دعوتنامه بمانید."
+}
