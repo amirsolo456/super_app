@@ -36,8 +36,8 @@ void main() async {
       final storageService = getIt.get<StorageService>();
       await storageService.setDeviceToken(token);
       final dyn = await storageService
-          .getLanguage(); // dynamic: could be String or Locale or null
-      initialLocale = Locale(dyn!.languageCode ?? 'fa'); // dyn;
+          .getLanguage();
+      initialLocale = Locale(dyn!.languageCode ?? 'fa');
     } catch (e) {
       print(e);
     }
