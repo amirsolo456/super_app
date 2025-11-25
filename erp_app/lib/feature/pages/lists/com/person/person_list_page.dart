@@ -1,6 +1,6 @@
+import 'package:erp_app/feature/pages/lists/com/person/person_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:erp_app/pages/lists/com/person/person_list_bloc.dart';
 import 'package:ui_components_package/mobile_components/Buttons/absoluted_button.dart';
 import 'package:ui_components_package/mobile_components/Expanders/list_datas_expander.dart';
 

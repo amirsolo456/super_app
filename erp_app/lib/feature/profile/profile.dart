@@ -1,8 +1,8 @@
+import 'package:erp_app/feature/profile/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resources_package/l10n/app_localizations.dart';
-import 'package:erp_app/pages/profile/profile_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool refreshData;

@@ -6,9 +6,9 @@ import 'package:services_package/page_cache_manager.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ui_components_package/mobile_components/Components/list_appbar.dart';
 
-import '../../pages/home/dashboard/dashboard.dart';
-import '../../pages/lists/com/person/person_list_page.dart';
-import '../../pages/profile/profile.dart';
+import '../../feature/DashboardPage/dashboard/dashboard.dart';
+import '../../feature/pages/lists/com/person/person_list_page.dart';
+import '../../feature/profile/profile.dart';
 
 class MainLayoutPage extends StatefulWidget {
   const MainLayoutPage({super.key});
@@ -70,17 +70,18 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
   };
 
   // لیست tabهای موجود در navigation bar
-  final List<NavButtonTabBarMode> _navigationTabs = [
-    NavButtonTabBarMode.menuTabMode,
-    NavButtonTabBarMode.newTabMode,
-    NavButtonTabBarMode.openedTabMode,
-    NavButtonTabBarMode.defaultTabMode,
-    NavButtonTabBarMode.profileTabMode,
-  ];
+  // final List<NavButtonTabBarMode> _navigationTabs = [
+  //   NavButtonTabBarMode.menuTabMode,
+  //   NavButtonTabBarMode.newTabMode,
+  //   NavButtonTabBarMode.openedTabMode,
+  //   NavButtonTabBarMode.defaultTabMode,
+  //   NavButtonTabBarMode.profileTabMode,
+  // ];
 
   Widget _getPage(NavButtonTabBarMode? tab) {
-    if (tab == null || tab == NavButtonTabBarMode.dashboardTabMode)
+    if (tab == null || tab == NavButtonTabBarMode.dashboardTabMode) {
       return const DashboardPage();
+    }
 
     if (_pageCache.containsKey(tab.value)) {
       _showSkeleton[tab.value] = _showSkeleton[tab.value] ?? false;
@@ -99,8 +100,12 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
           return const PersonListPage(refreshData: true);
         case NavButtonTabBarMode.profileTabMode:
           return const ProfilePage(refreshData: true);
+
+
+
+
         default:
-          return Center(child: Text("صفحه ${(tab!.value ?? 0)}"));
+          return Center(child: Text("صفحه ${(tab.value ?? 0)}"));
       }
     });
     _pageCache[tab.value] = rawPage;
@@ -117,7 +122,7 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
 
   Widget _paddedIcon(String assetPath) {
     return Padding(
-      padding: EdgeInsets.only(top: topPadding),
+      padding: EdgeInsets.only(top: 0),
       child: Image.asset(
         assetPath,
         width: size,
@@ -154,162 +159,113 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
     final currentIndex = _tabToIndex[_selectedTab] ?? 10;
     return Scaffold(
       appBar: _getAppBar(_selectedTab),
-      body: _getPage(_selectedTab),
+      body: SafeArea(child: _getPage(_selectedTab)),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          color: Colors.white, // رنگ پس زمینه سفید
           boxShadow: [
             BoxShadow(
-              color: Colors.black26,
-              blurRadius: 10,
+              color: Colors.black.withOpacity(0.10), // سایه مشکی با آلفا 10%
+              blurRadius: 8,
+              spreadRadius: 2,
               offset: Offset(0, -2),
             ),
           ],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            currentIndex: currentIndex >= 0 && currentIndex <= 4
-                ? currentIndex
-                : 0,
-            enableFeedback: true,
-            type: BottomNavigationBarType.fixed,
-            landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
-            iconSize: 50,
-            elevation: 0,
-            onTap: (index) {
-              final tab = _indexToTab[index];
-              if (tab != null) {
-                _onItemTapped(tab);
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: menuIcon,
-                activeIcon: activeMenuIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: newIcon,
-                activeIcon: activeNewIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: openedIcon,
-                activeIcon: activeOpenedIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: defaultIcon,
-                activeIcon: activeDefaultIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: accountIcon,
-                activeIcon: activeAccountIcon,
-                label: '',
-              ),
-            ],
-          ),
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+
+            //activeAccountIcon
+            _navItem(
+              icon: accountIcon,
+              activeIcon: activeAccountIcon,
+              isActive: currentIndex == 4,
+              onTap: () => _onItemTapped(_indexToTab[4]!),
+            ),
+
+            //defaultIcon
+            _navItem(
+              icon: defaultIcon,
+              activeIcon: activeDefaultIcon,
+              isActive: currentIndex == 3,
+              onTap: () => _onItemTapped(_indexToTab[3]!),
+            ),
+
+
+
+
+
+
+            //openedIcon
+            _navItem(
+              icon: openedIcon,
+              activeIcon: activeOpenedIcon,
+              isActive: currentIndex == 2,
+              onTap: () => _onItemTapped(_indexToTab[2]!),
+            ),
+
+            //newIcon
+            _navItem(
+              icon: newIcon,
+              activeIcon: activeNewIcon,
+              isActive: currentIndex == 1,
+              onTap: () => _onItemTapped(_indexToTab[1]!),
+            ),
+
+
+            //menuIcon
+            _navItem(
+              icon: menuIcon,
+              activeIcon: activeMenuIcon,
+              isActive: currentIndex == 0,
+              onTap: () => _onItemTapped(_indexToTab[0]!),
+            ),
+
+
+
+
+          ],
         ),
       ),
     );
   }
 
-  /*  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _getAppBar(_selectedTab),
-      body: IndexedStack(
-        index: _selectedTab.value,
-        alignment: Alignment.center,
-        children: List.generate(
-          5,
-          (i) => i == _selectedTab.value
-              ? _getPage(i)
-              : _pageCache[i] ?? const SizedBox(),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 10,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+  Widget _navItem({
+    required Widget icon,
+    required Widget activeIcon,
+    required bool isActive,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: isActive
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+
+          // خط که دقیقا به لبه بالا می‌چسبد
+          Container(
+            height: 2,
+            width: 35,
+            color: Colors.black,
           ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            currentIndex: _selectedTab.value,
-            enableFeedback: true,
-            type: BottomNavigationBarType.fixed,
-            landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
-            iconSize: 50,
-            elevation: 0,
-            onTap: (index) => _onItemTapped(NavButtonTabBarMode.values[index]),
-            items: [
-              BottomNavigationBarItem(
-                icon: menuIcon,
-                activeIcon: activeMenuIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: newIcon,
-                activeIcon: activeNewIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: openedIcon,
-                activeIcon: activeOpenedIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: defaultIcon,
-                activeIcon: activeDefaultIcon,
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: accountIcon,
-                activeIcon: activeAccountIcon,
-                label: '',
-              ),
-            ],
-          ),
-        ),
-      ),
+
+          SizedBox(height: 5), // فاصله ۵ پیکسل بین خط و آیکن
+
+          activeIcon,
+        ],
+      )
+          : icon,
     );
-  }*/
+  }
+
+
 }
 
-// abstract class IPageBaseRules {
-//   bool get refreshPage;
-//   void turnOnRefreshOnLoad();
-//   void turnOffRefreshOnLoad();
-// }
-//
-// class MyPage implements IPageBaseRules {
-//   bool _refreshPage = true;
-//
-//   @override
-//   bool get refreshPage => _refreshPage;
-//
-//   @override
-//   void turnOnRefreshOnLoad() {
-//     _refreshPage = true;
-//   }
-//
-//   @override
-//   void turnOffRefreshOnLoad() {
-//     _refreshPage = false;
-//   }
-// }

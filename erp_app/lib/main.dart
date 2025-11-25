@@ -1,5 +1,3 @@
-import 'package:erp_app/pages/lists/com/person/person_list_bloc.dart';
-import 'package:erp_app/pages/profile/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,6 +11,9 @@ import 'package:services_package/login_service.dart';
 import 'package:services_package/setup_services.dart';
 import 'package:services_package/storage_service.dart';
 import 'components/mainlayout/main_layout.dart';
+import 'feature/pages/lists/com/person/person_list_bloc.dart';
+import 'feature/profile/profile_bloc.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -125,10 +126,7 @@ Widget buildERPApp(Language lang) {
 
   return MultiBlocProvider(
     providers: [
-      Provider<LoginService>(
-        create: (_) =>
-            LoginService(client: apiClient, storage: StorageService()),
-      ),
+      Provider<LoginService>(create: (_) => LoginService(client: apiClient, storage: StorageService()),),
       BlocProvider(create: (_) => ProfileBloc()),
       BlocProvider(create: (_) => PersonListBloc(apiMiddleware: apiMiddleware)),
     ],

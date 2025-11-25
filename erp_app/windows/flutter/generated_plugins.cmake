@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  desktop_plugin
   firebase_core
   url_launcher_windows
 )
