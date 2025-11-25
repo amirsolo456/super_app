@@ -11,7 +11,8 @@ import 'package:services_package/login_service.dart';
 import 'package:services_package/setup_services.dart';
 import 'package:services_package/storage_service.dart';
 import 'components/mainlayout/main_layout.dart';
-import 'feature/pages/lists/com/person/person_list_bloc.dart';
+
+import 'feature/person/person_list_bloc.dart';
 import 'feature/profile/profile_bloc.dart';
 
 

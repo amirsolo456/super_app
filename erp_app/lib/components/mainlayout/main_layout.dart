@@ -5,9 +5,11 @@ import 'package:models_package/Base/enums.dart';
 import 'package:services_package/page_cache_manager.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ui_components_package/mobile_components/Components/list_appbar.dart';
-
-import '../../feature/DashboardPage/dashboard/dashboard.dart';
-import '../../feature/pages/lists/com/person/person_list_page.dart';
+import '../../feature/add_new/add-new_page.dart';
+import '../../feature/dashboard_page/dashboard/dashboard.dart';
+import '../../feature/default_page/default_page.dart';
+import '../../feature/open_page/Open_Page.dart';
+import '../../feature/person/person_list_page.dart';
 import '../../feature/profile/profile.dart';
 
 class MainLayoutPage extends StatefulWidget {
@@ -93,14 +95,27 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
     }
     final rawPage = _cacheManager.getOrCreate(tab.value, () {
       switch (tab) {
+
         case NavButtonTabBarMode.dashboardTabMode:
           return const DashboardPage();
+
         case NavButtonTabBarMode.menuTabMode:
-          // return const MenuPage();
           return const PersonListPage(refreshData: true);
+
+
+        case NavButtonTabBarMode.newTabMode:
+          return const AddNewPage();
+
+
+        case NavButtonTabBarMode.openedTabMode:
+          return const OpenPage();
+
+        case NavButtonTabBarMode.defaultTabMode:
+          return const DefaultPage();
+
+
         case NavButtonTabBarMode.profileTabMode:
           return const ProfilePage(refreshData: true);
-
 
 
 
@@ -143,12 +158,27 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
     switch (tab) {
       case NavButtonTabBarMode.menuTabMode:
         return ListAppBar(mode: AppBarsMode.erpPersonListMode);
-      // return ListAppBar(mode: AppBarsMode.erpApplicationMode);
-      case NavButtonTabBarMode.profileTabMode:
+
+      case NavButtonTabBarMode.newTabMode:
+        return ListAppBar(mode: AppBarsMode.erpNewMode);
+
+      case NavButtonTabBarMode.openedTabMode:
+        return ListAppBar(mode: AppBarsMode.erpOpendMode);
+
+      case NavButtonTabBarMode.defaultTabMode:
         return ListAppBar(mode: AppBarsMode.erpdefaultMode);
+
+
+      case NavButtonTabBarMode.profileTabMode:
+        return ListAppBar(mode: AppBarsMode.erpprofileMode);
+
       case NavButtonTabBarMode.dashboardTabMode:
       default:
-        return ListAppBar(mode: AppBarsMode.erpdefaultMode);
+        return ListAppBar(mode: AppBarsMode.erpdashboardMode);
+
+
+
+
     }
   }
 
