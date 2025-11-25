@@ -1,7 +1,12 @@
 enum AppBarsMode {
   erpPersonListMode(0),
-  erpApplicationMode(1),
-  defaultMode(2);
+  erpNewMode(1),
+  erpOpendMode(2),
+  erpdefaultMode(3),
+  erpprofileMode(4),
+
+  erpdashboardMode(10);
+
 
   final int value;
 
@@ -14,6 +19,7 @@ enum NavButtonTabBarMode {
   openedTabMode(2),
   defaultTabMode(3),
   profileTabMode(4),
+
   dashboardTabMode(10);
 
   final int value;

@@ -145,10 +145,10 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
         return ListAppBar(mode: AppBarsMode.erpPersonListMode);
       // return ListAppBar(mode: AppBarsMode.erpApplicationMode);
       case NavButtonTabBarMode.profileTabMode:
-        return ListAppBar(mode: AppBarsMode.defaultMode);
+        return ListAppBar(mode: AppBarsMode.erpdefaultMode);
       case NavButtonTabBarMode.dashboardTabMode:
       default:
-        return ListAppBar(mode: AppBarsMode.defaultMode);
+        return ListAppBar(mode: AppBarsMode.erpdefaultMode);
     }
   }
 
