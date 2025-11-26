@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,38 +13,48 @@ import 'package:services_package/login_service.dart';
 import 'package:services_package/setup_services.dart';
 import 'package:services_package/storage_service.dart';
 import 'components/mainlayout/main_layout.dart';
-
+import 'core/network/custom_http_override.dart';
+import 'core/network/injection_container.dart';
+import 'feature/menu/presentation/bloc/menu_bloc.dart';
+import 'feature/menu/presentation/bloc/menu_event.dart';
 import 'feature/person/person_list_bloc.dart';
 import 'feature/profile/profile_bloc.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
+  await init();
   setupServices();
 
   final apiClient = getIt.get<ApiClient>();
   final apiMiddleware = ApiClientMiddlewareService(apiClient: apiClient);
-  final storageService = getIt.get<StorageService>();
+  final storageService = sl<StorageService>();
 
   final lang =
       await storageService.getLanguage() ??
       Language(id: 0, smallName: 'fa', completeName: 'fa_IR', bigName: 'IR');
 
   runApp(
-    MultiBlocProvider(
-      providers: [
-        Provider<LoginService>(
-          create: (_) =>
-              LoginService(client: apiClient, storage: StorageService()),
-        ),
-        BlocProvider(create: (_) => ProfileBloc()),
-        BlocProvider(
-          create: (_) => PersonListBloc(apiMiddleware: apiMiddleware),
-        ),
-      ],
-      child: MainApp(initialLanguage: lang),
-    ),
-      // MaterialApp(
+      MultiBlocProvider(
+        providers: [
+          Provider<LoginService>(
+            create: (_) =>
+                LoginService(client: apiClient, storage: StorageService()),
+          ),
+          BlocProvider(create: (_) => ProfileBloc()),
+          BlocProvider(
+            create: (_) => PersonListBloc(apiMiddleware: apiMiddleware),
+          ),
+
+          BlocProvider(
+            create: (_) => sl<MenuBloc>()..add(LoadMenuEvent()),
+          ),
+        ],
+        child: MainApp(initialLanguage: lang),
+      )
+
+    // MaterialApp(
       //   title: 'Named Routes Demo',
       //   // Start the app with the "/" named route. In this case, the app starts
       //   // on the FirstScreen widget.

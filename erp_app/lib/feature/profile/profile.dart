@@ -70,80 +70,84 @@ class _ProfilePageState extends State<ProfilePage> {
           return const Center(child: CircularProgressIndicator());
         } else if (state is ProfileLoadDataSuccess) {
           return Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              children: [
-                Divider(height: 10, color: Color(0xFFB1B1B1)),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.userPasswordChange,
-                    style: itemsStyle,
-                  ),
-                  horizontalTitleGap: 10,
-                  leading: userPasswordChange,
-                ),
-                Divider(height: 10, color: Color(0xFFB1B1B1)),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.userWallet,
-                    style: itemsStyle,
-                  ),
-                  horizontalTitleGap: 10,
-                  leading: userWallet,
-                ),
-                Divider(height: 10, color: Color(0xFFB1B1B1)),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.userSettings,
-                    style: itemsStyle,
-                  ),
-                  horizontalTitleGap: 10,
-                  leading: userSettings,
-                ),
-                Divider(height: 10, color: Color(0xFFB1B1B1)),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.userOtherAccounts,
-                    style: itemsStyle,
-                  ),
-
-                  horizontalTitleGap: 10,
-                  leading: userOtherAccounts,
-                ),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.usersTitle,
-                    style: itemsStyle,
-                  ),
-                  contentPadding: EdgeInsets.only(right: 30),
-                  horizontalTitleGap: 10,
-                  leading: userInfoIcon,
-                ),
-
-                Divider(height: 10, color: Color(0xFFB1B1B1)),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.usersDevices,
-                    style: itemsStyle,
-                  ),
-                  horizontalTitleGap: 10,
-                  leading: userDevices,
-                ),
-                Divider(height: 10, color: Color(0xFFB1B1B1)),
-                ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.usersSignOut,
-                    style: TextStyle(
-                      color: Color(0xFFDC3545),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.userPasswordChange,
+                      style: itemsStyle,
                     ),
+                    horizontalTitleGap: 10,
+                    leading: userPasswordChange,
                   ),
-                  horizontalTitleGap: 10,
-                  leading: userSignOut,
-                  onTap: onSignoutPressed,
-                ),
-              ],
+                  Divider(height: 10, color: Color(0xFFB1B1B1)),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.userWallet,
+                      style: itemsStyle,
+                    ),
+                    horizontalTitleGap: 10,
+                    leading: userWallet,
+                  ),
+                  Divider(height: 10, color: Color(0xFFB1B1B1)),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.userSettings,
+                      style: itemsStyle,
+                    ),
+                    horizontalTitleGap: 10,
+                    leading: userSettings,
+                  ),
+                  Divider(height: 10, color: Color(0xFFB1B1B1)),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.userOtherAccounts,
+                      style: itemsStyle,
+                    ),
+
+                    horizontalTitleGap: 10,
+                    leading: userOtherAccounts,
+                  ),
+                  Divider(height: 10, color: Color(0xFFB1B1B1)),
+
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.usersTitle,
+                      style: itemsStyle,
+                    ),
+                    contentPadding: EdgeInsets.only(right: 30),
+                    horizontalTitleGap: 10,
+                    leading: userInfoIcon,
+                  ),
+
+                  Divider(height: 10, color: Color(0xFFB1B1B1)),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.usersDevices,
+                      style: itemsStyle,
+                    ),
+                    horizontalTitleGap: 10,
+                    leading: userDevices,
+                  ),
+                  Divider(height: 10, color: Color(0xFFB1B1B1)),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.usersSignOut,
+                      style: TextStyle(
+                        color: Color(0xFFDC3545),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
+                    ),
+                    horizontalTitleGap: 10,
+                    leading: userSignOut,
+                    onTap: onSignoutPressed,
+                  ),
+                ],
+              ),
             ),
           );
         } else if (state is ProfileLoadDataError) {

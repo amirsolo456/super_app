@@ -8,6 +8,7 @@ import 'package:ui_components_package/mobile_components/Components/list_appbar.d
 import '../../feature/add_new/add-new_page.dart';
 import '../../feature/dashboard_page/dashboard/dashboard.dart';
 import '../../feature/default_page/default_page.dart';
+import '../../feature/menu/presentation/pages/menu_page.dart';
 import '../../feature/open_page/Open_Page.dart';
 import '../../feature/person/person_list_page.dart';
 import '../../feature/profile/profile.dart';
@@ -100,7 +101,9 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
           return const DashboardPage();
 
         case NavButtonTabBarMode.menuTabMode:
-          return const PersonListPage(refreshData: true);
+          // return const PersonListPage(refreshData: true);
+          return MenuPage();
+          // return MenuPage();
 
 
         case NavButtonTabBarMode.newTabMode:

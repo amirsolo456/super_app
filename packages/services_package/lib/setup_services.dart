@@ -15,6 +15,8 @@ void setupServices() {
   final _storage = StorageService();
   final _defaults = Defaults();
   final _apisetting = ApiSettings(
+
+
     baseUrl: 'https://216.65.200.215/',
     loginUrl: 'api/auth/login',
     appDefaults: _defaults,

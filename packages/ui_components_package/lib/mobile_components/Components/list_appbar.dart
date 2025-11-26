@@ -48,43 +48,27 @@ class ListAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(120);
+  Size get preferredSize => const Size.fromHeight(100);
 }
 
 AppBar buildPersonListAppBar(BuildContext context) {
   return AppBar(
-    title: Text(
-      textAlign: TextAlign.start,
-      // AppLocalizations.of(context)!.personList,
-      "لیست نفرت",
-      style: TextStyle(color: Colors.black),
-    ),
-    centerTitle: true,
-    actions: [
-      IconButton(
-        onPressed: () {},
-        icon: futuresIcon,
-        highlightColor: Colors.black.withOpacity(0.05),
-      ),
-      IconButton(
-        onPressed: () {},
-        icon: moreIcon,
-        highlightColor: Colors.black.withOpacity(0.05),
-      ),
-    ],
     backgroundColor: Colors.white,
-    elevation: 0,
-    scrolledUnderElevation: 0,
-    toolbarHeight: 70,
-    bottom: PreferredSize(
-      preferredSize: const Size.fromHeight(50),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [ListPagination(), ButtonPanel()],
+    automaticallyImplyLeading: false,
+
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          "منو",
+          style: TextStyle(color: Colors.black),
         ),
-      ),
+        // SizedBox(width: 5), // فاصله دلخواه
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.arrow_forward),
+        ),
+      ],
     ),
   );
 }
@@ -150,16 +134,26 @@ AppBar builderpdefaultAppBar(BuildContext context) {
 
 AppBar builderpprofileAppBar(BuildContext context) {
   return AppBar(
-    scrolledUnderElevation: 0.0,
-    elevation: 0.0,
     backgroundColor: Colors.white,
-    primary: true,
-    title: Text(
-      "حساب کاربری",
-      style: const TextStyle(color: Color(0xFF585858)),
+    automaticallyImplyLeading: false,
+
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          "حساب کاربری",
+          style: TextStyle(color: Colors.black),
+        ),
+        // SizedBox(width: 5), // فاصله دلخواه
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.arrow_forward),
+        ),
+      ],
     ),
-    centerTitle: false,
   );
+
+
 }
 
 
