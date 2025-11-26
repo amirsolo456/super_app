@@ -14,7 +14,6 @@
 
     @override
     Future<List<MenuModel>> getMenu() async {
-      print("🟣 RemoteDataSource CALLED");
 
       final response = await apiClient.post(
         "https://216.65.200.215/api/auth/menu",

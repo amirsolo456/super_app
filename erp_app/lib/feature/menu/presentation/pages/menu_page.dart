@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../domain/entities/menu_entity.dart';
 import '../bloc/menu_bloc.dart';
 import '../bloc/menu_event.dart';
 import '../bloc/menu_state.dart';
-import '../../domain/entities/menu_entity.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -14,134 +14,161 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  String _searchQuery = '';
+  TextEditingController searchController = TextEditingController();
+  List<MenuEntity> filteredMenus = [];
+
+  bool isFocused = false;
+  final FocusNode searchFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    context.read<MenuBloc>().add(LoadMenuEvent());
+
+    searchFocusNode.addListener(() {
+      setState(() {
+        isFocused = searchFocusNode.hasFocus;
+      });
+    });
+  }
+
+  void filterMenus(List<MenuEntity> menus, String query) {
+    filteredMenus = menus
+        .map((menu) => _filterMenu(menu, query))
+        .where((e) => e != null)
+        .cast<MenuEntity>()
+        .toList();
+    setState(() {});
+  }
+
+  MenuEntity? _filterMenu(MenuEntity menu, String query) {
+    // فیلتر کردن خود منو یا زیرمنوها
+    final bool matches = menu.menuDesc.contains(query);
+    final subMenusFiltered = menu.subMenus
+        .map((e) => _filterMenu(e, query))
+        .where((e) => e != null)
+        .cast<MenuEntity>()
+        .toList();
+
+    if (matches || subMenusFiltered.isNotEmpty) {
+      return MenuEntity(
+        menuId: menu.menuId,
+        icon: menu.icon,
+        menuDesc: menu.menuDesc,
+        iconUrl: menu.iconUrl,
+        actionType: menu.actionType,
+        menuType: menu.menuType,
+        actionId: menu.actionId,
+        repoId: menu.repoId,
+        subMenus: subMenusFiltered,
+      );
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('منو')),
+      // appBar: AppBar(title: const Text('منو')),
       body: BlocBuilder<MenuBloc, MenuState>(
         builder: (context, state) {
           if (state is MenuLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (state is MenuError) {
             return const Center(child: Text('خطا در بارگذاری'));
           }
-
           if (state is MenuLoaded) {
-            // فیلتر منوها بر اساس جستجو
-            final filteredMenus = _filterMenus(state.menus, _searchQuery);
+            // اگر چیزی تایپ شد، فیلتر را اعمال کن
+            if (searchController.text.isEmpty) {
+              filteredMenus = state.menus;
+            }
 
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'جستجو...',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.search),
+            return                 Directionality(
+              textDirection: TextDirection.rtl,
+
+              child: Column(
+                children: [
+                   Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isFocused ? Colors.white : Colors.grey[100],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color:isFocused ? Colors.black12 : Colors.white)
+                        ),
+                        child: TextField(
+                          controller: searchController,
+                          focusNode: searchFocusNode,
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'IRanSans',
+                          ),
+                          decoration: const InputDecoration(
+                            hintText: 'جستجو',
+                            hintStyle: TextStyle(color: Colors.black54),
+
+                            // مهم! باید صفر شود تا صد در صد رنگ پس‌زمینه از Container گرفته شود
+                            filled: false,
+                            // fillColor: Colors.red,
+
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          ),
+                          onChanged: (value) => filterMenus(state.menus, value),
+                        ),
+                      )
+
+
+                   ),
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: filteredMenus.length,
+                      itemBuilder: (context, index) {
+                        return _MenuTile(filteredMenus[index]);
+                      },
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value;
-                      });
-                    },
                   ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredMenus.length,
-                    itemBuilder: (context, index) {
-                      return _MenuTile(filteredMenus[index]);
-                    },
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           }
-
           return const SizedBox();
         },
       ),
     );
   }
-
-  // تابع بازگشتی برای فیلتر منو و زیرمنوها
-  List<MenuEntity> _filterMenus(List<MenuEntity> menus, String query) {
-    if (query.isEmpty) return menus;
-
-    List<MenuEntity> result = [];
-
-    for (var menu in menus) {
-      // فیلتر زیرمنوها
-      final filteredSubMenus = _filterMenus(menu.subMenus, query);
-
-      // اگر خود آیتم یا هر زیرمنو شامل query بود اضافه می‌کنیم
-      if (menu.menuDesc.contains(query) || filteredSubMenus.isNotEmpty) {
-        result.add(MenuEntity(
-          menuId: menu.menuId,
-          icon: menu.icon,
-          menuDesc: menu.menuDesc,
-          iconUrl: menu.iconUrl,
-          actionType: menu.actionType,
-          menuType: menu.menuType,
-          actionId: menu.actionId,
-          repoId: menu.repoId,
-          subMenus: filteredSubMenus,
-        ));
-      }
-    }
-
-    return result;
-  }
 }
 
-/// ویجت منوی اصلی با زیرمنوهای تو در تو و آیکون SVG
 class _MenuTile extends StatelessWidget {
   final MenuEntity item;
   const _MenuTile(this.item);
 
   @override
   Widget build(BuildContext context) {
-    Widget leadingIcon;
-    if (item.icon.isNotEmpty) {
-      leadingIcon = SizedBox(
-        width: 24,
-        height: 24,
-        child: SvgPicture.string(
-          item.icon,
-          fit: BoxFit.contain,
-          placeholderBuilder: (context) =>
-          const CircularProgressIndicator(strokeWidth: 1),
-        ),
-      );
-    } else {
-      leadingIcon = const SizedBox(width: 24, height: 24);
-    }
+    final bool hasChildren = item.subMenus.isNotEmpty;
 
-    if (item.subMenus.isEmpty) {
+    final Widget titleWidget = Row(
+      children: [
+        if (item.icon.isNotEmpty)
+          SvgPicture.string(item.icon, width: 20, height: 20),
+        const SizedBox(width: 10),
+        Expanded(child: Text(item.menuDesc, textDirection: TextDirection.rtl)),
+      ],
+    );
+
+    if (!hasChildren) {
       return ListTile(
-        leading: leadingIcon,
-        title: Text(item.menuDesc),
+        title: titleWidget,
         onTap: () {
-          // Action برای آیتم بدون زیرمنو
           print('Action for ${item.menuDesc}');
         },
       );
     }
 
     return ExpansionTile(
-      leading: leadingIcon,
-      title: Text(item.menuDesc),
+      title: titleWidget,
       children: item.subMenus.map((e) => _MenuTile(e)).toList(),
     );
   }

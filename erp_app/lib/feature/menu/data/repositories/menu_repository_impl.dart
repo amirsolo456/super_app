@@ -12,9 +12,8 @@ class MenuRepositoryImpl implements MenuRepository {
   @override
   Future<List<MenuEntity>> getMenu() async {
 
-    print("🟡 Repository: getMenu CALLED");
     final models = await remoteDataSource.getMenu();
-    print("🟡 Repository: result LENGTH = ");
+
     return models.map((e) => e.toEntity()).toList();
   }
 }

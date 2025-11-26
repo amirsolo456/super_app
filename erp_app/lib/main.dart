@@ -95,8 +95,9 @@ Widget build(BuildContext context) {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
-        theme: ThemeData(
-          fontFamily: 'IRanSans',
+          theme: ThemeData(
+            fontFamily: 'IRanSans',
+            fontFamilyFallback: ['Vazirmatn', 'Tahoma', 'sans-serif'],
           scaffoldBackgroundColor: Colors.white,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         ),
@@ -165,17 +166,28 @@ class PartOfContainerApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Aryan Front',
-      locale: Locale(initialLanguage.languageCode.toString()),
+      locale: const Locale('fa', 'IR'),
+      supportedLocales: const [
+        Locale('fa', 'IR'),
+        Locale('en', 'US'),
+      ],
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
+
+      title: 'Erp',
+      // locale: Locale(initialLanguage.languageCode.toString()),
+      // localizationsDelegates: const [
+      //   AppLocalizations.delegate,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      // supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
       theme: ThemeData(
-        fontFamily: 'IRanSans',
         scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),

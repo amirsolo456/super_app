@@ -16,8 +16,6 @@ class ApiClient {
       body: jsonEncode(body), // ← این باید ورودی تابع باشد
     );
 
-    print("📡 STATUS: ${response.statusCode}");
-    print("📦 BODY: ${response.body}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
