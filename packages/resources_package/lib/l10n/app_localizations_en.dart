@@ -87,4 +87,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get userSignupLabel => 'You are not a member of any account.\nIf you are the owner or a representative of a business, you can create an account for your [b]main user[/b] or [b]company admin[/b]!\nIf you are an employee of a business, please wait to receive an invitation.';
+
+  @override
+  String get userInvitationLabel => 'A person named [b][Inviter\'s Full Name][/b] has invited you to the account [b][Account Name or ID][/b].\nWould you like to accept this invitation and join this account?\n';
+
+  @override
+  String get userOtpValidationTitle => 'A 4-digit code has been sent to the number [0912 202 5458].\n';
 }

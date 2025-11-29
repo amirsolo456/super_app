@@ -26,3 +26,13 @@ enum NavButtonTabBarMode {
 
   const NavButtonTabBarMode(this.value);
 }
+
+enum LoginResultType {
+  success,
+  error,
+  cancelled,
+  networkError,
+  validationError,
+}
+
+enum NetworkMode { live, simulatedSuccess, simulatedError }

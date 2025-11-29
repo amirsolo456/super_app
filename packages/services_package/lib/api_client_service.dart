@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'safe_exquter.dart';
-import 'package:models_package/Base/base_response.dart';
-import 'storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
+import 'package:http_exception/http_exception.dart';
+import 'package:models_package/Base/base_request.dart'
+    show BaseRequest, Defaults;
+import 'package:models_package/Base/base_response.dart';
+import 'package:services_package/api_exception_service.dart';
+import 'package:services_package/storage_service.dart';
 
-import 'package:models_package/Base/base_request.dart' show BaseRequest, Defaults;
+import 'safe_exquter.dart';
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
 
@@ -40,7 +43,9 @@ class ApiClient extends IApiClient {
   static final _loginUrl = "api/auth/login";
 
   ApiClient({required this.storage, required this.appSettings});
+
   late final http.Client _httpClient = RetryClient(http.Client());
+
   @override
   Future<T?> sendObjectRequestAsync<T extends BaseResponse<D>, D>(
     String url,
@@ -189,23 +194,25 @@ class ApiClient extends IApiClient {
           return finalReslt;
       }
 
-      if (response.statusCode == 401) {
-        // اگر unauthorized شد → اضافه کردن به صف
-        final tcs = Completer<T?>();
-        _pendingRequests.add(() async {
-          final result = await sendObjectRequestAsync<T, D>(
-            url,
-            method,
-            data,
-            setToken,
-            Exception(),
-          );
-          if (!tcs.isCompleted) tcs.complete(result);
-        });
+      HttpException? exception = apiExceptionValidator(response);
+      if (exception != null) {
+        if (exception.httpStatus.code == UnauthorizedHttpException) {
+          final tcs = Completer<T?>();
+          _pendingRequests.add(() async {
+            final result = await sendObjectRequestAsync<T, D>(
+              url,
+              method,
+              data,
+              setToken,
+              Exception(),
+            );
+            if (!tcs.isCompleted) tcs.complete(result);
+          });
 
-        // شروع refresh token
-        await refreshToken();
-        return await tcs.future;
+          if (await refreshToken()) {
+            return await tcs.future;
+          }
+        }
       }
       return await json.decode(response.body) as T;
     } catch (e) {
