@@ -185,7 +185,7 @@ class View {
   View({this.id, this.desc, this.config, this.type});
 
   MyModel? get listConfig {
-    if (type == "List") {
+    if (type == "list") {
       if (config != null) {
         try {
           return MyModel.fromJson(json.decode(config!));
@@ -201,7 +201,7 @@ class View {
   }
 
   ViewFormConfig? get formConfig {
-    if (type == "Form") {
+    if (type == "form") {
       if (config != null) {
         try {
           return ViewFormConfig.fromJson(json.decode(config!));
@@ -247,11 +247,11 @@ class MyModel {
   factory MyModel.fromJson(Map<String, dynamic> json) {
     return MyModel(
       column: json['column'] ?? null as List<ViewListConfig>?,
-      isDefault: json['editEndpoint'] ?? null as bool?,
-      isDisableAutoRefresh: json['deleteEndpoint'] as bool?,
-      isDisableCommentCount: json['formIdField'] ?? null as bool?,
-      isDisableSidebarStats: json['fields'] ?? null as bool?,
-      isDisableCount: json['fields'] ?? null as bool?,
+      isDefault: json['isDefault'] ?? null as bool?,
+      isDisableAutoRefresh: json['isDisableAutoRefresh'] as bool?,
+      isDisableCommentCount: json['isDisableCommentCount'] ?? null as bool?,
+      isDisableSidebarStats: json['isDisableSidebarStats'] ?? null as bool?,
+      isDisableCount: json['isDisableCount'] ?? null as bool?,
     );
   }
 }

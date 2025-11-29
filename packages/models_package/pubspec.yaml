@@ -1,7 +1,7 @@
 name: models_package
 description: "aryan front models"
 version: 0.0.1
-homepage:
+
 
 environment:
   sdk: ^3.9.2
@@ -21,7 +21,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  uses-material-design: true
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
