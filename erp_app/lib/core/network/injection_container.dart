@@ -10,18 +10,18 @@ import 'api_client.dart';
 
 final sl = GetIt.instance;
 
-Future<void> init() async {
+void init() {
   // Core
   sl.registerLazySingleton<ApiClient>(() => ApiClient(http.Client()));
 
   // Data sources
   sl.registerLazySingleton<MenuRemoteDataSource>(
-        () => MenuRemoteDataSourceImpl(sl<ApiClient>()),
+    () => MenuRemoteDataSourceImpl(sl<ApiClient>()),
   );
 
   // Repository
   sl.registerLazySingleton<MenuRepository>(
-        () => MenuRepositoryImpl(sl<MenuRemoteDataSource>()),
+    () => MenuRepositoryImpl(sl<MenuRemoteDataSource>()),
   );
 
   // Use case
@@ -30,4 +30,3 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(() => MenuBloc(getMenuUseCase: sl<GetMenuUseCase>()));
 }
-

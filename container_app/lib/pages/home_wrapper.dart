@@ -82,8 +82,8 @@ class _HomeWrapperState extends State<HomeWrapper> {
   Future<void> _handleSuccessfulLogin(LoginModuleResult result) async {
     try {
       final storageService = getIt.get<StorageService>();
-      await storageService.setToken(result.token!);
-      await storageService.setUser(result.user!);
+      // await storageService.setToken(result.token!);
+      // await storageService.setUser(result.user!);
 
 
       Navigator.of(context).pushReplacement(

@@ -27,36 +27,37 @@ class _LoadingButtonState extends State<LoadingButton> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity, // کل عرض والد
-      height: 45,
-      child:
-      MaterialButton(
-        onPressed: _isLoading ? null : _handlePress,
-        color: Colors.black,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Colors.black,
-            width: 1,
-            strokeAlign: BorderSide.strokeAlignOutside,
-          ),
-          borderRadius: BorderRadiusGeometry.all(Radius.circular(8)),
-        ),
-        child: _isLoading
-            ? CircularProgressIndicator(
+      height: 50,
+      child: Padding(
+        padding: EdgeInsetsGeometry.only(left: 10, right: 10),
+        child: MaterialButton(
+          onPressed: _isLoading ? null : _handlePress,
           color: Colors.black,
-          strokeWidth: 3,
-          strokeAlign: 1,
-          padding: EdgeInsetsGeometry.all(5),
-        )
-            : Text(
-          widget.text,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: Colors.black,
+              width: 1,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
+            borderRadius: BorderRadiusGeometry.all(Radius.circular(10)),
           ),
+          child: _isLoading
+              ? CircularProgressIndicator(
+                  color: Colors.black,
+                  strokeWidth: 3,
+                  strokeAlign: 1,
+                  padding: EdgeInsetsGeometry.all(10),
+                )
+              : Text(
+                  widget.text,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
         ),
       ),
-
     );
   }
 }

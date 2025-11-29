@@ -7,11 +7,11 @@ import 'package:models_package/Base/language.dart';
 import 'package:provider/provider.dart';
 import 'package:resources_package/l10n/app_localizations.dart';
 import 'package:services_package/Interfaces/apiclient_middleware_service.dart';
-import 'package:services_package/Interfaces/istorage_service.dart';
 import 'package:services_package/api_client_service.dart';
 import 'package:services_package/login_service.dart';
 import 'package:services_package/setup_services.dart';
 import 'package:services_package/storage_service.dart';
+
 import 'components/mainlayout/main_layout.dart';
 import 'core/network/custom_http_override.dart';
 import 'core/network/injection_container.dart';
@@ -20,11 +20,10 @@ import 'feature/menu/presentation/bloc/menu_event.dart';
 import 'feature/person/person_list_bloc.dart';
 import 'feature/profile/profile_bloc.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  await init();
+  init();
   setupServices();
 
   final apiClient = getIt.get<ApiClient>();
@@ -36,36 +35,34 @@ void main() async {
       Language(id: 0, smallName: 'fa', completeName: 'fa_IR', bigName: 'IR');
 
   runApp(
-      MultiBlocProvider(
-        providers: [
-          Provider<LoginService>(
-            create: (_) =>
-                LoginService(client: apiClient, storage: StorageService()),
-          ),
-          BlocProvider(create: (_) => ProfileBloc()),
-          BlocProvider(
-            create: (_) => PersonListBloc(apiMiddleware: apiMiddleware),
-          ),
+    MultiBlocProvider(
+      providers: [
+        Provider<LoginService>(
+          create: (_) =>
+              LoginService(client: apiClient, storage: StorageService()),
+        ),
+        BlocProvider(create: (_) => ProfileBloc()),
+        BlocProvider(
+          create: (_) => PersonListBloc(apiMiddleware: apiMiddleware),
+        ),
 
-          BlocProvider(
-            create: (_) => sl<MenuBloc>()..add(LoadMenuEvent()),
-          ),
-        ],
-        child: MainApp(initialLanguage: lang),
-      )
+        BlocProvider(create: (_) => sl<MenuBloc>()..add(LoadMenuEvent())),
+      ],
+      child: MainApp(initialLanguage: lang),
+    ),
 
     // MaterialApp(
-      //   title: 'Named Routes Demo',
-      //   // Start the app with the "/" named route. In this case, the app starts
-      //   // on the FirstScreen widget.
-      //   initialRoute: '/',
-      //   routes: {
-      //     // When navigating to the "/" route, build the FirstScreen widget.
-      //     '/': (context) => const FirstScreen(),
-      //     // When navigating to the "/second" route, build the SecondScreen widget.
-      //     '/second': (context) => const SecondScreen(),
-      //   },
-      // )
+    //   title: 'Named Routes Demo',
+    //   // Start the app with the "/" named route. In this case, the app starts
+    //   // on the FirstScreen widget.
+    //   initialRoute: '/',
+    //   routes: {
+    //     // When navigating to the "/" route, build the FirstScreen widget.
+    //     '/': (context) => const FirstScreen(),
+    //     // When navigating to the "/second" route, build the SecondScreen widget.
+    //     '/second': (context) => const SecondScreen(),
+    //   },
+    // )
   );
 }
 
@@ -95,9 +92,9 @@ Widget build(BuildContext context) {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
-          theme: ThemeData(
-            fontFamily: 'IRanSans',
-            fontFamilyFallback: ['Vazirmatn', 'Tahoma', 'sans-serif'],
+        theme: ThemeData(
+          fontFamily: 'IRanSans',
+          fontFamilyFallback: ['Vazirmatn', 'Tahoma', 'sans-serif'],
           scaffoldBackgroundColor: Colors.white,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         ),
@@ -137,10 +134,14 @@ class MainApp extends StatelessWidget {
 Widget buildERPApp(Language lang) {
   final apiClient = getIt.get<ApiClient>();
   final apiMiddleware = ApiClientMiddlewareService(apiClient: apiClient);
-
+  init();
   return MultiBlocProvider(
     providers: [
-      Provider<LoginService>(create: (_) => LoginService(client: apiClient, storage: StorageService()),),
+      Provider<LoginService>(
+        create: (_) =>
+            LoginService(client: apiClient, storage: StorageService()),
+      ),
+      BlocProvider(create: (_) => sl<MenuBloc>()..add(LoadMenuEvent())),
       BlocProvider(create: (_) => ProfileBloc()),
       BlocProvider(create: (_) => PersonListBloc(apiMiddleware: apiMiddleware)),
     ],
@@ -167,10 +168,7 @@ class PartOfContainerApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: const Locale('fa', 'IR'),
-      supportedLocales: const [
-        Locale('fa', 'IR'),
-        Locale('en', 'US'),
-      ],
+      supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
