@@ -214,9 +214,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             label: Text(AppLocalizations.of(context)!.phoneNumber),
             onPressed: () =>
                 _getBackPressed(LoginOtpValidationState(phonNumber ?? '')),
-            icon: AryanAppAssets.images.imageByKey(
-              AryanAssets.smallGoCaret ?? AryanAssets.defaultImage,
-            ),
+            icon: AryanAppAssets.images.imageByKey(AryanAssets.smallGoCaret),
           ),
           VerificationWidget(),
         ],
@@ -273,15 +271,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   }
 
   Widget _buildLoginButton(BuildContext context, LoginStates state) {
-    String buttonText = AppLocalizations.of(context)!.loginButtonText;
-    bool isLoading = state is LoginLoadingState;
-
-    if (state is LoginSignUpState) {
-      buttonText = AppLocalizations.of(context)!.loginButtonSignUpText;
-    } else if (state is LoginOtpValidationState) {
-      buttonText = AppLocalizations.of(context)!.loginButtonOtpText;
-    }
-
     return LoadingButton(
       text: AppLocalizations.of(context)!.loginButtonText,
       onPressed: () => _handleButtonPress(context, state),
