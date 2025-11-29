@@ -150,26 +150,71 @@ class _MenuTile extends StatelessWidget {
     final bool hasChildren = item.subMenus.isNotEmpty;
 
     final Widget titleWidget = Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         if (item.icon.isNotEmpty)
-          SvgPicture.string(item.icon, width: 20, height: 20),
-        const SizedBox(width: 10),
-        Expanded(child: Text(item.menuDesc, textDirection: TextDirection.rtl)),
+          SvgPicture.string(item.icon, width: 18, height: 18),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            item.menuDesc,
+            textDirection: TextDirection.rtl,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ),
       ],
     );
 
+    /// -------------------------
+    /// بدون زیرمنو
+    /// -------------------------
     if (!hasChildren) {
-      return ListTile(
-        title: titleWidget,
-        onTap: () {
-          print('Action for ${item.menuDesc}');
-        },
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: ListTile(
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -3),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          title: titleWidget,
+          onTap: () {},
+        ),
       );
     }
 
-    return ExpansionTile(
-      title: titleWidget,
-      children: item.subMenus.map((e) => _MenuTile(e)).toList(),
+    /// -------------------------
+    /// با زیرمنو
+    /// -------------------------
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+        ),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 12),
+          childrenPadding: const EdgeInsets.only(right: 20, bottom: 2),
+
+          /// ⚡️ این خط جهت قرارگیری فلش را تغییر می‌دهد
+          controlAffinity: ListTileControlAffinity.trailing,
+
+          collapsedIconColor: Colors.black,
+          iconColor: Colors.black,
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -3),
+
+          title: Row(
+            children: [
+              /// آیکون + متن سمت راست
+              Expanded(child: titleWidget),
+
+              /// فاصله بین عنوان و فلش (که چپ می‌رود)
+              const SizedBox(width: 10),
+            ],
+          ),
+
+          children: item.subMenus.map((e) => _MenuTile(e)).toList(),
+        ),
+      ),
     );
   }
 }
