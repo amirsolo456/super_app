@@ -53,12 +53,12 @@ AppBar buildPersonListAppBar(BuildContext context) {
       IconButton(
         onPressed: () {},
         icon: futuresIcon,
-        highlightColor: Colors.black.withOpacity(0.05),
+        highlightColor: Colors.transparent,
       ),
       IconButton(
         onPressed: () {},
         icon: moreIcon,
-        highlightColor: Colors.black.withOpacity(0.05),
+        highlightColor: Colors.transparent,
       ),
     ],
     backgroundColor: Colors.white,

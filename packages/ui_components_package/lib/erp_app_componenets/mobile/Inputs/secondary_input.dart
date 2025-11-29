@@ -111,7 +111,7 @@ abstract class AryanInputs {
   }
 
   static InputDecoration _inputDeco(
-    String hintText,
+    String customHintText,
     bool obscure,
     Color hintColor,
     Color fillColor, {
@@ -119,7 +119,7 @@ abstract class AryanInputs {
     Widget? openIcon,
     Widget? closeIcon,
   }) => InputDecoration(
-    hintText: hintText ?? '',
+    hintText: customHintText,
     hintFadeDuration: Duration(milliseconds: 550),
     hintStyle: TextStyle(color: hintColor, fontSize: 14),
     fillColor: fillColor,
