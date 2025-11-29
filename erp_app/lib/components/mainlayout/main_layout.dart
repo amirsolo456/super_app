@@ -5,12 +5,18 @@ import 'package:models_package/Base/enums.dart';
 import 'package:services_package/page_cache_manager.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:ui_components_package/mobile_components/Components/list_appbar.dart';
+<<<<<<< Updated upstream
 import '../../feature/add_new/add-new_page.dart';
 import '../../feature/dashboard_page/dashboard/dashboard.dart';
 import '../../feature/default_page/default_page.dart';
 import '../../feature/menu/presentation/pages/menu_page.dart';
 import '../../feature/open_page/Open_Page.dart';
 import '../../feature/person/person_list_page.dart';
+=======
+
+import '../../feature/DashboardPage/dashboard/dashboard.dart';
+import '../../feature/pages/lists/auth/menu/menu_page.dart';
+>>>>>>> Stashed changes
 import '../../feature/profile/profile.dart';
 
 class MainLayoutPage extends StatefulWidget {
@@ -101,6 +107,7 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
           return const DashboardPage();
 
         case NavButtonTabBarMode.menuTabMode:
+<<<<<<< Updated upstream
           // return const PersonListPage(refreshData: true);
           return MenuPage();
           // return MenuPage();
@@ -122,6 +129,13 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
 
 
 
+=======
+          return const MenuPage();
+        //return const PersonListPage(refreshData: true);
+        case NavButtonTabBarMode.profileTabMode:
+          return const ProfilePage(refreshData: true);
+
+>>>>>>> Stashed changes
         default:
           return Center(child: Text("صفحه ${(tab.value ?? 0)}"));
       }
@@ -160,6 +174,7 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
   PreferredSizeWidget _getAppBar(NavButtonTabBarMode tab) {
     switch (tab) {
       case NavButtonTabBarMode.menuTabMode:
+<<<<<<< Updated upstream
         return ListAppBar(mode: AppBarsMode.erpPersonListMode);
 
       case NavButtonTabBarMode.newTabMode:
@@ -175,6 +190,12 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
       case NavButtonTabBarMode.profileTabMode:
         return ListAppBar(mode: AppBarsMode.erpprofileMode);
 
+=======
+        //return ListAppBar(mode: AppBarsMode.erpPersonListMode);
+        return ListAppBar(mode: AppBarsMode.erpApplicationMode);
+      case NavButtonTabBarMode.profileTabMode:
+        return ListAppBar(mode: AppBarsMode.erpApplicationMode);
+>>>>>>> Stashed changes
       case NavButtonTabBarMode.dashboardTabMode:
       default:
         return ListAppBar(mode: AppBarsMode.erpdashboardMode);
@@ -213,7 +234,6 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-
             //activeAccountIcon
             _navItem(
               icon: accountIcon,
@@ -229,11 +249,6 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
               isActive: currentIndex == 3,
               onTap: () => _onItemTapped(_indexToTab[3]!),
             ),
-
-
-
-
-
 
             //openedIcon
             _navItem(
@@ -251,7 +266,6 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
               onTap: () => _onItemTapped(_indexToTab[1]!),
             ),
 
-
             //menuIcon
             _navItem(
               icon: menuIcon,
@@ -259,10 +273,6 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
               isActive: currentIndex == 0,
               onTap: () => _onItemTapped(_indexToTab[0]!),
             ),
-
-
-
-
           ],
         ),
       ),
@@ -280,25 +290,17 @@ class _MainLayoutPageState extends State<MainLayoutPage> {
       onTap: onTap,
       child: isActive
           ? Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // خط که دقیقا به لبه بالا می‌چسبد
+                Container(height: 2, width: 35, color: Colors.black),
 
-          // خط که دقیقا به لبه بالا می‌چسبد
-          Container(
-            height: 2,
-            width: 35,
-            color: Colors.black,
-          ),
+                SizedBox(height: 5), // فاصله ۵ پیکسل بین خط و آیکن
 
-          SizedBox(height: 5), // فاصله ۵ پیکسل بین خط و آیکن
-
-          activeIcon,
-        ],
-      )
+                activeIcon,
+              ],
+            )
           : icon,
     );
   }
-
-
 }
-
