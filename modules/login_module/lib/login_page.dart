@@ -82,6 +82,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
         style: TextStyle(
           textBaseline: TextBaseline.ideographic,
           fontSize: 16,
+          fontFamily: 'Yekan',
           color: ThemeColorsManager(ThemeManager.themeMode).primary,
         ),
       ),
@@ -99,7 +100,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
         style: TextStyle(
           textBaseline: TextBaseline.ideographic,
           fontWeight: FontWeight.bold,
-          fontFamily: 'IRANSans',
+          fontFamily: 'Yekan',
           fontSize: 14,
         ),
         softWrap: true,

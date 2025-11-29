@@ -49,6 +49,7 @@ abstract class AryanText {
     return TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.bold,
+      fontFamily: 'Yekan',
       color: colors.listContentPrimary,
     );
   }
@@ -58,6 +59,7 @@ abstract class AryanText {
     return TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.bold,
+      fontFamily: 'Yekan',
       color: colors.listTitlePrimary,
     );
   }
@@ -70,7 +72,7 @@ abstract class AryanText {
       fontStyle: FontStyle.normal,
       height: 1,
       fontWeight: FontWeight.w500,
-      fontFamily: 'IRANSansX',
+      fontFamily: 'Yekan',
       color: colors.primary,
     );
   }
