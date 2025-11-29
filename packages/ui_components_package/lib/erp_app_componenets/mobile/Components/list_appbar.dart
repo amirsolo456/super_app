@@ -28,10 +28,6 @@ class ListAppBar extends StatelessWidget implements PreferredSizeWidget {
     switch (mode) {
       case AppBarsMode.erpPersonListMode:
         return buildPersonListAppBar(context);
-
-      case AppBarsMode.erpApplicationMode:
-        return buildApplicationAppBar(context);
-
       default:
         return buildDefaultAppBar(context);
     }
