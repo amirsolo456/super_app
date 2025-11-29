@@ -14,6 +14,8 @@ dependencies:
     sdk: flutter
   intl: ^0.20.1
   localization: ^2.1.1
+  persian_fonts: ^1.0.6
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +77,9 @@ flutter:
     - assets/images/lang_icon.png
     - assets/images/eyes_close.png
     - assets/images/eyes_open.png
+    - assets/images/small_go_caret.png
+    - assets/images/aryan_image_error.png
+    - assets/images/aryan_image_error_256px.png
 
   generate: true
   uses-material-design: true

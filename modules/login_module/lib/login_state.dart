@@ -7,42 +7,48 @@ class LoginInitialState extends LoginStates {}
 
 class LoginUsernameState extends LoginStates {
   final String username;
+
   LoginUsernameState(this.username);
 }
 
 class LoginPasswordState extends LoginStates {
   final String username;
+
   LoginPasswordState(this.username);
 }
 
 class LoginRecoverPasswordState extends LoginStates {
   final String username;
+
   LoginRecoverPasswordState(this.username);
 }
 
 class LoginOtpValidationState extends LoginStates {
-  final String username;
   final String phoneNumber;
-  LoginOtpValidationState(this.username, this.phoneNumber);
+
+  LoginOtpValidationState(this.phoneNumber);
 }
 
 class LoginSignUpState extends LoginStates {
   final String username;
+
   LoginSignUpState(this.username);
 }
 
 class LoginLoadingState extends LoginStates {
   final String message;
+
   LoginLoadingState(this.message);
 }
 
 class LoginErrorState extends LoginStates {
-  final String error;
-  LoginErrorState(this.error);
+  final LoginModuleResult moduleResult;
+
+  LoginErrorState(this.moduleResult);
 }
 
 class LoginSuccessState extends LoginStates {
-  final String token;
-  final UserDto user;
-  LoginSuccessState(this.token, this.user);
+  final LoginModuleResult moduleResult;
+
+  LoginSuccessState(this.moduleResult);
 }

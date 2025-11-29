@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+
 import '../../domain/entities/menu_entity.dart';
 import '../bloc/menu_bloc.dart';
 import '../bloc/menu_event.dart';
@@ -83,44 +84,47 @@ class _MenuPageState extends State<MenuPage> {
               filteredMenus = state.menus;
             }
 
-            return                 Directionality(
+            return Directionality(
               textDirection: TextDirection.rtl,
 
               child: Column(
                 children: [
-                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: isFocused ? Colors.white : Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color:isFocused ? Colors.black12 : Colors.white)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isFocused ? Colors.white : Colors.grey[100],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isFocused ? Colors.black12 : Colors.white,
                         ),
-                        child: TextField(
-                          controller: searchController,
-                          focusNode: searchFocusNode,
-                          textDirection: TextDirection.rtl,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'IRanSans',
-                          ),
-                          decoration: const InputDecoration(
-                            hintText: 'جستجو',
-                            hintStyle: TextStyle(color: Colors.black54),
-
-                            // مهم! باید صفر شود تا صد در صد رنگ پس‌زمینه از Container گرفته شود
-                            filled: false,
-                            // fillColor: Colors.red,
-
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                          ),
-                          onChanged: (value) => filterMenus(state.menus, value),
+                      ),
+                      child: TextField(
+                        controller: searchController,
+                        focusNode: searchFocusNode,
+                        textDirection: TextDirection.rtl,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'IRanSans',
                         ),
-                      )
+                        decoration: const InputDecoration(
+                          hintText: 'جستجو',
+                          hintStyle: TextStyle(color: Colors.black54),
 
+                          // مهم! باید صفر شود تا صد در صد رنگ پس‌زمینه از Container گرفته شود
+                          filled: false,
 
-                   ),
+                          // fillColor: Colors.red,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                        ),
+                        onChanged: (value) => filterMenus(state.menus, value),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.zero,

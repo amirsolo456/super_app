@@ -18,7 +18,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get loginPageTitle => 'صفحه ورود';
 
   @override
-  String get phoneNumber => 'شماره تلفن';
+  String get phoneNumber => 'شماره موبایل';
 
   @override
   String get password => 'رمز عبور';
@@ -87,4 +87,10 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get userSignupLabel => 'شما در هیچ حسابی عضویت ندارید.\nاگر صاحب یا نماینده یک کسب و کار هستید، میتوانید یک حساب برای [b]کاربر اصلی[/b] یا [b]ادمین شرکت[/b] خودتان بسازید !\nاگر از پرسنل یک کسب و کار هستید، منتظر دریافت دعوتنامه بمانید.';
+
+  @override
+  String get userInvitationLabel => 'شخصی با نام [b][نام و نام خانوادگی فرد دعوت کننده][/b] شما را به حساب کاربری [b][نام یا شناسه اکانت/سازمان][/b] دعوت کرده است.\nآیا مایل به تأیید این دعوت و پیوستن به این حساب هستید؟';
+
+  @override
+  String get userOtpValidationTitle => 'کد 4رقمی به شماره [5458 202 0912] ارسال شد.';
 }

@@ -30,7 +30,6 @@ void setupServices() {
   getIt.registerSingleton<ApiClient>(apiClient);
   getIt.registerSingleton<OtpService>(_otp);
   getIt.registerSingleton<UserExistService>(UserExistService());
-
   getIt.registerSingleton<NotificationService>(
     NotificationService(storage: _storage),
   );

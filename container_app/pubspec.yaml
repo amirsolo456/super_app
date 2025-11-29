@@ -33,6 +33,8 @@ dependencies:
     path: ../packages/services_package
   ui_components_package:
     path: ../packages/ui_components_package
+  login_module:
+    path: ../modules/login_module
 
   cupertino_icons: ^1.0.8
   flutter_html: ^3.0.0

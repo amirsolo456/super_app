@@ -1,7 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:models_package/Base/enums.dart';
+import 'package:models_package/Base/login_module.dart';
 import 'package:models_package/Data/Auth/Login/dto.dart' as Login;
 import 'package:models_package/Data/Auth/User/dto.dart' as User;
 import 'package:models_package/Data/Auth/User/dto.dart';
@@ -9,14 +12,18 @@ import 'package:services_package/login_service.dart';
 import 'package:services_package/storage_service.dart';
 import 'package:services_package/user_exist.dart';
 
-part 'login_event.dart';
+import 'login_manager_service.dart';
 
+part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvents, LoginStates> {
   final LoginService _loginService = GetIt.instance<LoginService>();
   final StorageService _storageService = GetIt.instance<StorageService>();
   final UserExistService _userExistService = GetIt.instance<UserExistService>();
+  final LoginModuleManager _moduleManager =
+      GetIt.instance<LoginModuleManager>();
+
   final int _networkMode;
   final Login.LoginRequest finalRequest = Login.LoginRequest();
 
@@ -33,6 +40,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
     on<LoginBackEvent>(_onBackEvent);
     on<LoginLoadingEvent>(_onLoadingEvent);
     on<LoginErrorEvent>(_onErrorEvent);
+    on<LoginSuccessEvent>(_onSuccessEvent);
   }
 
   FutureOr<void> _onInitialEvent(
@@ -54,11 +62,9 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
       if (response != null) {
         if (response.result!.isNotEmpty &&
             response.result!.toLowerCase().contains('success')) {
-
           finalRequest.userName = event.username;
           emit(LoginPasswordState(event.username));
         } else {
-
           finalRequest.userName = null;
           emit(LoginSignUpState(event.username));
         }
@@ -80,24 +86,45 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
       try {
         final result = await _performLogin(event.username, event.password);
         if (result.success) {
-          emit(LoginSuccessState(result.token!, result.user!));
+          emit(LoginSuccessState(result));
         } else {
-          emit(LoginErrorState(result.error ?? 'خطا در ورود'));
-          emit(LoginPasswordState(event.password));
+          emit(LoginErrorState(result));
         }
       } catch (e) {
-        emit(LoginErrorState('خطای شبکه: ${e.toString()}'));
-        emit(LoginPasswordState(event.password));
+        emit(
+          LoginErrorState(
+            LoginModuleResult(
+              success: false,
+              error: 'خطای غیرمنتظره: ${e.toString()}',
+              resultType: LoginResultType.error,
+            ),
+          ),
+        );
       }
-    } else if(_networkMode == 1){
+    } else if (_networkMode == 1) {
       await Future.delayed(Duration(milliseconds: 500));
+      final simulatedUser = UserDto(
+        token: 'simulated_token',
+        refreshToken: 'simulated_refresh_token',
+        firstName: 'asd',
+        fullName: 'asd',
+      );
+      final result = LoginModuleResult(
+        success: true,
+        token: simulatedUser.token,
+        user: simulatedUser,
 
-      emit(LoginSuccessState(event.password,UserDto(token:'',refreshToken: '',firstName: 'asd',fullName: 'asd')));
-    }
-    else if(_networkMode == 2){
+        resultType: LoginResultType.success,
+      );
+      emit(LoginSuccessState(result));
+    } else if (_networkMode == 2) {
       await Future.delayed(Duration(milliseconds: 500));
-      emit(LoginErrorState('خطا در ورود'));
-      emit(LoginPasswordState(event.password));
+      final result = LoginModuleResult(
+        success: false,
+        error: 'خطا در ورود',
+        resultType: LoginResultType.error,
+      );
+      emit(LoginErrorState(result));
     }
   }
 
@@ -105,7 +132,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
     LoginRecoveryPasswordEvent event,
     Emitter<LoginStates> emit,
   ) {
-    emit(LoginOtpValidationState(event.username,''));
+    emit(LoginOtpValidationState(event.username));
     // emit(LoginRecoverPasswordState(event.username));
   }
 
@@ -147,7 +174,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
     } else if (currentState is LoginSignUpState) {
       emit(LoginInitialState());
     } else if (currentState is LoginOtpValidationState) {
-      emit(LoginUsernameState(currentState.username));
+      emit(LoginUsernameState(currentState.phoneNumber));
     } else {
       emit(LoginInitialState());
     }
@@ -166,10 +193,24 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
     LoginErrorEvent event,
     Emitter<LoginStates> emit,
   ) {
-    emit(LoginErrorState(event.error));
+    emit(LoginErrorState(event.moduleResult));
+
+    _moduleManager.notifyResult(event.moduleResult);
   }
 
-  Future<LoginResult> _performLogin(String username, String password) async {
+  FutureOr<void> _onSuccessEvent(
+    LoginSuccessEvent event,
+    Emitter<LoginStates> emit,
+  ) {
+    emit(LoginSuccessState(event.moduleResult));
+
+    _moduleManager.notifyResult(event.moduleResult);
+  }
+
+  Future<LoginModuleResult> _performLogin(
+    String username,
+    String password,
+  ) async {
     try {
       final deviceToken = await _storageService.getDeviceToken();
       final request = Login.LoginRequest(
@@ -186,26 +227,38 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
       final response = await _loginService.login(request);
 
       if (response != null && response.result?.contains('success') == true) {
-        return LoginResult(
+        final userDto = UserDto(
+          token: response.accessToken!,
+          refreshToken: response.refreshToken!,
+          firstName: username,
+          // You might want to get the actual first name from the response
+          fullName: username,
+        );
+        await _storageService.setToken(userDto.token!);
+        await _storageService.setUser(userDto);
+
+        return LoginModuleResult(
           success: true,
           token: response.accessToken,
-          user: UserDto(
-            token: response.accessToken,
-            refreshToken: response.refreshToken,
-          ),
+          user: userDto,
+          resultType: LoginResultType.success,
         );
       } else {
-        return LoginResult(
+        return LoginModuleResult(
           success: false,
           error: 'نام کاربری یا رمز عبور نادرست است',
+          resultType: LoginResultType.validationError,
         );
       }
     } catch (e) {
-      return LoginResult(success: false, error: 'خطا در ارتباط با سرور');
+      return LoginModuleResult(
+        success: false,
+        error: 'خطا در ارتباط با سرور: ${e.toString()}',
+        resultType: LoginResultType.networkError,
+      );
     }
   }
 
-  // متد برای بررسی وجود کاربر
   Future<bool> checkUserExists(String username) async {
     try {
       final deviceToken = await _storageService.getDeviceToken();
@@ -217,14 +270,12 @@ class LoginBloc extends Bloc<LoginEvents, LoginStates> {
       return false;
     }
   }
+
+  @override
+  Future<void> close() {
+    _moduleManager.dispose();
+    return super.close();
+  }
 }
 
 // کلاس کمکی برای مدیریت نتیجه لاگین
-class LoginResult {
-  final bool success;
-  final String? token;
-  final UserDto? user;
-  final String? error;
-
-  LoginResult({required this.success, this.token, this.user, this.error});
-}

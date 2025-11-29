@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:models_package/Data/Auth/Menu/dto.dart';
 import 'package:services_package/Interfaces/fake_data_service.dart';
-import 'package:ui_components_package/mobile_components/Lists/Menu/erp_menu.dart';
-
-// فرض بر این است که FakeMenuDataService و مدل‌های Response / ResponseData را داریم
+import 'package:ui_components_package/erp_app_componenets/mobile/Lists/Menu/erp_menu.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -22,8 +20,6 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Future<Response> _loadMenu() async {
-    // اینجا می‌تونی به جای سرویس فیک، سرویس واقعی بزاری
-    // الان فیک دیتا برمی‌گردونیم
     return FakeMenuDataService.getFakeMenu();
   }
 
@@ -35,15 +31,12 @@ class _MenuPageState extends State<MenuPage> {
         future: _futureMenu,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // در حال بارگذاری
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            // اگر خطا دارد
             return Center(child: Text('خطا: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
             return const Center(child: Text('موردی یافت نشد'));
           } else {
-            // دیتا را داریم
             final response = snapshot.data!;
             final menuItems = response.data;
 

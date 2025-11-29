@@ -49,6 +49,11 @@ class LoginLoadingEvent extends LoginEvents {
 }
 
 class LoginErrorEvent extends LoginEvents {
-  final String error;
-  LoginErrorEvent(this.error);
+  final LoginModuleResult moduleResult;
+  LoginErrorEvent(this.moduleResult);
+}
+
+class LoginSuccessEvent extends LoginEvents {
+  final LoginModuleResult moduleResult;
+  LoginSuccessEvent(this.moduleResult);
 }

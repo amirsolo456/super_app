@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:resources_package/Resources/Assets/assets_manager.dart';
+import 'package:resources_package/Resources/Assets/icons_manager.dart';
 import 'package:resources_package/l10n/app_localizations.dart';
+import 'package:resources_package/resources/Theme/theme_manager.dart';
 import 'package:resources_package/resources/styles/styles.dart';
-import 'package:ui_components_package/common_componenets/Buttons/language_button_standalone/language_button_stand_alone.dart';
-import 'package:ui_components_package/common_componenets/aryan_logo.dart'
-    as dir;
-import 'package:ui_components_package/mobile_components/Buttons/dynamic_button.dart';
-import 'package:ui_components_package/mobile_components/Buttons/loading_button.dart';
-import 'package:ui_components_package/mobile_components/Inputs/verification.dart';
+import 'package:ui_components_package/erp_app_componenets/common/Buttons/language_button_standalone/language_button_stand_alone.dart';
+import 'package:ui_components_package/erp_app_componenets/common/aryan_logo.dart';
+import 'package:ui_components_package/erp_app_componenets/mobile/Buttons/dynamic_button.dart';
+import 'package:ui_components_package/erp_app_componenets/mobile/Buttons/loading_button.dart';
+import 'package:ui_components_package/erp_app_componenets/mobile/Inputs/secondary_input.dart';
+import 'package:ui_components_package/erp_app_componenets/mobile/Inputs/verification.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../elements/html_text_parser.dart';
-import '../launcher_page.dart';
+
+import 'html_text_parser.dart';
 import 'login_bloc.dart';
 
 class LoginPage extends StatelessWidget {
@@ -56,9 +59,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     if (value == null || value.isEmpty) {
       return _validationNullMsg;
     }
-    if (value.length < 6) {
-      return _validationMsg;
-    }
     return null;
   }
 
@@ -66,29 +66,44 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     if (value == null || value.isEmpty) {
       return _validationNullMsg;
     }
-    if (value.length < 3) {
-      return _validationMsg;
-    }
     return null;
   }
 
   Widget _buildPasswordTitle(BuildContext context) {
-    return ListTile(
-      title: Text(AppLocalizations.of(context)!.password),
-      horizontalTitleGap: 20,
+    return SizedBox(
+      height: 30,
+      child: Text(
+        AppLocalizations.of(context)!.password,
+        maxLines: 1,
+        textWidthBasis: TextWidthBasis.parent,
+        textAlign: TextAlign.right,
+        textDirection: TextDirection.rtl,
+        softWrap: true,
+        style: TextStyle(
+          textBaseline: TextBaseline.ideographic,
+          fontSize: 16,
+          color: ThemeColorsManager(ThemeManager.themeMode).primary,
+        ),
+      ),
     );
   }
 
   Widget _buildUsernameTitle(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: ListTile(
-        title: Text(
-          AppLocalizations.of(context)!.phoneNumber,
-          textAlign: TextAlign.right,
+    return SizedBox(
+      height: 30,
+      child: Text(
+        AppLocalizations.of(context)!.phoneNumber,
+        textDirection: TextDirection.rtl,
+        textWidthBasis: TextWidthBasis.parent,
+        maxLines: 1,
+        style: TextStyle(
+          textBaseline: TextBaseline.ideographic,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'IRANSans',
+          fontSize: 14,
         ),
-        leadingAndTrailingTextStyle: AryanText.secondary(),
-        horizontalTitleGap: 20,
+        softWrap: true,
+        textAlign: TextAlign.right,
       ),
     );
   }
@@ -98,14 +113,22 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     return Form(
       key: _userformKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildUsernameTitle(context),
-          AryanText.secondaryUsernameTextForm(
-            controller: _usernameController,
-            hintText: AppLocalizations.of(context)!.phoneNumber,
-            obscureText: false,
-            validator: _usernameFieldValidator,
+          MediaQuery(
+            data: const MediaQueryData(),
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Material(
+                child: AryanInputs.secondaryUsernameTextForm(
+                  controller: _usernameController,
+                  obscureText: false,
+                  hintText: '0912 202 5458',
+                  validator: _usernameFieldValidator,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -116,12 +139,13 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     return Form(
       key: _passformKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildPasswordTitle(context),
-          AryanText.secondaryPasswordTextFormWithToggle(
+          AryanInputs.secondaryPasswordTextFormWithToggle(
             controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.password,
+            inputHintText: ". . . . . . . . . .",
+
             validator: _passwordFieldValidator,
           ),
           TextButton(
@@ -152,9 +176,9 @@ class _LoginPageBodyState extends State<LoginPageBody> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           _buildPasswordTitle(context),
-          AryanText.secondaryPasswordTextFormWithToggle(
+          AryanInputs.secondaryPasswordTextFormWithToggle(
             controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.passwordRecovery,
+            inputHintText: AppLocalizations.of(context)!.passwordRecovery,
             validator: _passwordFieldValidator,
           ),
           const Divider(height: 20, color: Colors.transparent),
@@ -163,9 +187,9 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             horizontalTitleGap: 20,
             leading: const Icon(Icons.lock, color: Colors.black),
           ),
-          AryanText.secondaryPasswordTextFormWithToggle(
+          AryanInputs.secondaryPasswordTextFormWithToggle(
             controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.password,
+            inputHintText: AppLocalizations.of(context)!.password,
             validator: _passwordFieldValidator,
           ),
         ],
@@ -179,23 +203,21 @@ class _LoginPageBodyState extends State<LoginPageBody> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _buildPasswordTitle(context),
-          AryanText.secondaryPasswordTextFormWithToggle(
-            controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.passwordRecovery,
-            validator: _passwordFieldValidator,
+          Text(
+            AppLocalizations.of(
+              context,
+            )!.userOtpValidationTitle.replaceFirst('[]', phonNumber ?? ' '),
           ),
-          const Divider(height: 20, color: Colors.transparent),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.passwordRecovery),
-            horizontalTitleGap: 20,
-            leading: const Icon(Icons.lock, color: Colors.black),
+
+          TextButton.icon(
+            label: Text(AppLocalizations.of(context)!.phoneNumber),
+            onPressed: () =>
+                _getBackPressed(LoginOtpValidationState(phonNumber ?? '')),
+            icon: AryanAppAssets.images.imageByKey(
+              AryanAssets.smallGoCaret ?? AryanAssets.defaultImage,
+            ),
           ),
-          AryanText.secondaryPasswordTextFormWithToggle(
-            controller: _passwordController,
-            hintText: AppLocalizations.of(context)!.password,
-            validator: _passwordFieldValidator,
-          ),
+          VerificationWidget(),
         ],
       ),
     );
@@ -238,7 +260,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              state.error,
+              state.moduleResult.error ?? '',
               style: AryanText.primButtonTextStyle().copyWith(
                 color: Colors.red,
               ),
@@ -358,23 +380,20 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     return BlocListener<LoginBloc, LoginStates>(
       listener: (context, state) {
         if (state is LoginSuccessState) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => LauncherPage()),
-            (route) => false,
-          );
+          Navigator.of(context).pop(state.moduleResult);
         }
 
         if (state is LoginErrorState && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.moduleResult.error ?? ''),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
       child: BlocBuilder<LoginBloc, LoginStates>(
         builder: (context, state) {
-          // _updateValidationMessages(context);
-
           return Scaffold(
             appBar: (state is LoginUsernameState || state is LoginInitialState)
                 ? AppBar(
@@ -416,7 +435,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
             child: Column(
               key: ValueKey(state.runtimeType),
               children: [
-                const dir.AryanLogo(),
+                const AryanLogo(),
                 const SizedBox(height: 20),
                 _buildContent(state, context),
                 if (state is! LoginLoadingState && state is! LoginErrorState)
