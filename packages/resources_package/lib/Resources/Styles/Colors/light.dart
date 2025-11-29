@@ -55,8 +55,9 @@ class FontColors {
   static const Color _aryanTextBorderColor = Color(0xFFCECECE);
   static const Color _aryanTextHintColor = Color(0xFF939393);
   static const Color _white = Color(0XFFFFFFFF);
-  static const Color _cromewhite = Color(0XFFFBFBFB);
+  static const Color _cromeWite = Color(0XFFFBFBFB);
   static const Color _counterTheme = Color(0XFF333333);
+  static const Color _linkColor = Color(0XFF086EDC);
 
   static Color get primary => _primary;
 
@@ -78,9 +79,11 @@ class FontColors {
 
   static Color get darkPrimary => _dark;
 
-  static Color get ordinaryWhite => _cromewhite;
+  static Color get ordinaryWhite => _cromeWite;
 
   static Color get aryanWhite => _white;
+
+  static Color get aryanLinkColor => _linkColor;
 
   static Color get counterTheme => _counterTheme;
 }

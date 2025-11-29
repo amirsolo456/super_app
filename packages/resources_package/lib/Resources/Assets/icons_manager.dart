@@ -157,8 +157,8 @@ class _AppImages {
     'eyesClose': AryanAssets.eyesClose,
     'eyesOpen': AryanAssets.eyesOpen,
     'smallGoCaret': AryanAssets.smallGoCaret,
-    'smallGoCaret': AryanAssets.defaultImage,
-    'smallGoCaret': AryanAssets.defaultImage256Px,
+    'defaultImage': AryanAssets.defaultImage,
+    'defaultImage256Px': AryanAssets.defaultImage256Px,
   };
 
   /// Shortcut to create an Image widget from a known path
@@ -183,7 +183,6 @@ class _AppImages {
     excludeFromSemantics: excludeFromSemantics,
   );
 
-
   /// Create Image by key name (returns a placeholder SizedBox if key not found)
   Widget imageByKey(
     String keyName, {
@@ -207,5 +206,28 @@ class _AppImages {
       fit: fit,
       semanticLabel: semanticLabel,
     );
+  }
+
+  Widget imageByValue(
+    String value, {
+    Key? key,
+    double? width,
+    double? height,
+    BoxFit? fit,
+    String? semanticLabel,
+  }) {
+    final path = value;
+    if (byKey.values.any((c) => c == value)) {
+      return Image.asset(
+        path,
+        package: 'resources_package',
+        key: key,
+        width: width,
+        height: height,
+        fit: fit,
+        semanticLabel: semanticLabel,
+      );
+    }
+    return SizedBox(width: width, height: height);
   }
 }

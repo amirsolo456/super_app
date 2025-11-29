@@ -58,6 +58,7 @@ class FontColors {
   static const Color _darkTextSecondary = Color(0xFFBEBEBE);
   static const Color _darkBorder = Color(0xFF3A3A3A);
   static const Color _aryanTextHintColor = Color(0xFF939393);
+  static const Color _linkColor = Color(0XFF086EDC);
 
   // Dark getters
   static Color get darkBackground => _darkBackground;
@@ -71,7 +72,7 @@ class FontColors {
   static Color get listContentTitlePrimary => _primary;
 
   static Color get aryanText => _aryanTextBackgroundColor;
-  static Color get aryanTextHintColor => _aryanTextBackgroundColor;
+  static Color get aryanTextHintColor => _aryanTextHintColor;
   static Color get aryanTextBackgroundColor => _aryanTextBackgroundColor;
 
   static Color get aryanTextBorderColor => _aryanTextBorderColor;
@@ -80,6 +81,8 @@ class FontColors {
   static Color get listContentSecondary => _secondary;
 
   static Color get darkPrimary => _dark;
+
+  static Color get aryanLinkColor => _linkColor;
 
   static Color get ordinaryWhite => _white;
 

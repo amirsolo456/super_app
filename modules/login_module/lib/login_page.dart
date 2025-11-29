@@ -146,7 +146,6 @@ class _LoginPageBodyState extends State<LoginPageBody> {
           AryanInputs.secondaryPasswordTextFormWithToggle(
             controller: _passwordController,
             inputHintText: ". . . . . . . . . .",
-
             validator: _passwordFieldValidator,
           ),
           TextButton(
@@ -168,9 +167,9 @@ class _LoginPageBodyState extends State<LoginPageBody> {
   }
 
   Widget _buildRecoverPasswordBody(
-    LoginRecoverPasswordState state,
-    BuildContext context,
-  ) {
+      LoginRecoverPasswordState state,
+      BuildContext context,
+      ) {
     return Form(
       key: _passRecformKey,
       child: Column(
@@ -184,7 +183,11 @@ class _LoginPageBodyState extends State<LoginPageBody> {
           ),
           const Divider(height: 20, color: Colors.transparent),
           ListTile(
-            title: Text(AppLocalizations.of(context)!.passwordRecovery),
+            titleAlignment: ListTileTitleAlignment.center,
+            title: Text(
+              AppLocalizations.of(context)!.passwordRecovery,
+              textAlign: TextAlign.center,
+            ),
             horizontalTitleGap: 20,
             leading: const Icon(Icons.lock, color: Colors.black),
           ),
@@ -202,22 +205,25 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     return Form(
       key: _passRecformKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
+            textAlign: TextAlign.center,
             AppLocalizations.of(
               context,
             )!.userOtpValidationTitle.replaceFirst('[]', phonNumber ?? ' '),
           ),
 
           TextButton.icon(
-            label: Text(AppLocalizations.of(context)!.phoneNumber),
+            label: Text(AppLocalizations.of(context)!.phoneNumber,style: TextStyle(color: ThemeColorsManager().primary),),
             onPressed: () =>
                 _getBackPressed(LoginOtpValidationState(phonNumber ?? '')),
-            icon: AryanAppAssets.images.imageByKey(AryanAssets.smallGoCaret),
+            icon: AryanAppAssets.images.imageByValue(AryanAssets.smallGoCaret),
+            iconAlignment: IconAlignment.start,
           ),
           VerificationWidget(),
         ],
+        // textDirection: TextDirection.rtl,
       ),
     );
   }
@@ -341,7 +347,7 @@ class _LoginPageBodyState extends State<LoginPageBody> {
     } else if (state is LoginRecoverPasswordState) {
       content = _buildRecoverPasswordBody(state, context);
     } else if (state is LoginOtpValidationState) {
-      content = VerificationWidget();
+      content = _buildOtpPasswordBody(state.phoneNumber);
     } else if (state is LoginSignUpState) {
       content = _buildSignUpBody(state, context);
     } else {
@@ -387,27 +393,27 @@ class _LoginPageBodyState extends State<LoginPageBody> {
           return Scaffold(
             appBar: (state is LoginUsernameState || state is LoginInitialState)
                 ? AppBar(
-                    primary: true,
-                    scrolledUnderElevation: 0.0,
-                    automaticallyImplyLeading: false,
-                    backgroundColor: Colors.white,
-                    animateColor: false,
-                    title: const LanguageButtonStandAlone(),
-                  )
+              primary: true,
+              scrolledUnderElevation: 0.0,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              animateColor: false,
+              title: const LanguageButtonStandAlone(),
+            )
                 : AppBar(
-                    toolbarHeight: 50,
-                    primary: true,
-                    animateColor: false,
-                    backgroundColor: Colors.white,
-                    scrolledUnderElevation: 0.0,
-                    leading: CustomDynamicButton(
-                      icon: const Icon(Icons.arrow_back),
-                      useDefaultAnimation: false,
-                      onPressed: () =>
-                          context.read<LoginBloc>().add(_getBackPressed(state)),
-                    ),
-                    actions: const [LanguageButtonStandAlone()],
-                  ),
+              toolbarHeight: 50,
+              primary: true,
+              animateColor: false,
+              backgroundColor: Colors.white,
+              scrolledUnderElevation: 0.0,
+              leading: CustomDynamicButton(
+                icon: const Icon(Icons.arrow_back),
+                useDefaultAnimation: false,
+                onPressed: () =>
+                    context.read<LoginBloc>().add(_getBackPressed(state)),
+              ),
+              actions: const [LanguageButtonStandAlone()],
+            ),
             body: _buildBody(state, context),
           );
         },
